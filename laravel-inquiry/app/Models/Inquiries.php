@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id ID
  * @property string $name name
  * @property string $email email
- * @property text $content inquiry_content
- * @property text $type inquiry_type
+ * @property string $content inquiry_content
+ * @property string $type inquiry_type
  */
 class Inquiries extends Model
 {
@@ -20,7 +20,7 @@ class Inquiries extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string, text>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',

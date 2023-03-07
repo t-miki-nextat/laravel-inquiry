@@ -1,18 +1,36 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Models\Inquiries;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 
 class InquiriesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a inquiry form.
+     *
+     * @return View
      */
-    public function index()
+    public function form(): View
     {
-        //
+        return view('inquiries.form');
+    }
+
+    /**
+     * Display a confirm page.
+     *
+     * @return View
+     */
+    public function complete(): View
+    {
+        return view('inquiries.complete');
     }
 
     /**
@@ -25,10 +43,21 @@ class InquiriesController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return Application|\Illuminate\Foundation\Application|RedirectResponse|Redirector
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        //
+        $inquiry=new Inquiries;
+
+        $inquiry->name=$request->input('name');
+        $inquiry->email=$request->input('email');
+        $inquiry->content=$request->input('content');
+        $inquiry->type=$request->input('type');
+        $inquiry->save();
+
+        return redirect('inquiries/complete');
     }
 
     /**
