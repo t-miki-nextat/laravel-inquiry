@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/inquiries', function () {
+    return view('inquiries');
+});
+
+Route::post('/inquiries', function () {
+    return view('welcome');
+});
+
+Route::get('/inquiries/complete', function () {
     return view('welcome');
 });

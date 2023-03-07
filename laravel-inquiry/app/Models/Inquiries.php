@@ -17,4 +17,15 @@ use Illuminate\Database\Eloquent\Model;
 class Inquiries extends Model
 {
     use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string, text>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'content',
+        'type',
+    ];
 }
