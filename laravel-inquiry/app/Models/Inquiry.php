@@ -29,4 +29,8 @@ class Inquiry extends Model
         'content',
         'type',
     ];
+
+    protected $casts = [
+        'type'  => InquiryType::class,
+    ];
 }

@@ -21,5 +21,7 @@ enum InquiryType: string
             self::OTHER => 'その他',
         };
     }
+
+
 }
 
