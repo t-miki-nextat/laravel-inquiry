@@ -6,9 +6,9 @@ namespace App\Enums;
 
 enum InquiryType: string
 {
-    case ESTIMATE = 'お見積り';
-    case RECRUIT = '採用';
-    case OTHER = 'その他';
+    case ESTIMATE = 'estimate';
+    case RECRUIT = 'recruit';
+    case OTHER = 'other';
 
     /**
      *

@@ -14,14 +14,15 @@ use App\Http\Controllers\InquiryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::group(['prefix'=>'inquiry', 'as'=>'inquiry.'], function(){
 
-    Route::get('/', function(){ return view('form'); })->name('form');
+Route::group(['prefix'=>'inquiries'], function(){
 
-    Route::get('complete', function(){ return view('complete'); })->name('complete');
+Route::get('/', [InquiryController::class, 'form'])->name('form');
 
-    Route::post('store', [InquiryController::class, 'store'])->name('store');
+Route::get('complete', [InquiryController::class, 'complete'])->name('complete');
+
 });
 
+Route::post('store', [InquiryController::class, 'store'])->name('inquiries.store');
 
 
