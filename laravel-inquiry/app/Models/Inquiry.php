@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class Inquiry extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,6 +33,6 @@ class Inquiry extends Model
     ];
 
     protected $casts = [
-        'type'  => InquiryType::class,
+        'type' => InquiryType::class,
     ];
 }

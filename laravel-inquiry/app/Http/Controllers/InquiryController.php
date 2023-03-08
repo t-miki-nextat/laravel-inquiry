@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -47,17 +48,17 @@ class InquiryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreInquiryRequest $request
-     *
+     * @return RedirectResponse
      */
-    public function store(StoreInquiryRequest $request)
+    public function store(StoreInquiryRequest $request): RedirectResponse
     {
+        $request->validated();
+        $inquiry = new Inquiry;
 
-        $inquiry=new Inquiry;
-
-        $inquiry->name=$request->input('name');
-        $inquiry->email=$request->input('email');
-        $inquiry->content=$request->input('content');
-        $inquiry->type=$request->input('type');
+        $inquiry->name = $request->input('name');
+        $inquiry->email = $request->input('email');
+        $inquiry->content = $request->input('content');
+        $inquiry->type = $request->input('type');
         $inquiry->save();
 
         return redirect()->route("complete");

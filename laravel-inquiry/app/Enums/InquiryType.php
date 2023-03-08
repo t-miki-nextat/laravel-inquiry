@@ -1,8 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Enums;
 
+
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 
 enum InquiryType: string
 {
@@ -11,17 +16,16 @@ enum InquiryType: string
     case OTHER = 'other';
 
     /**
-     *
+     * @return string
      */
     public function text(): string
     {
-        return match($this) {
+        return match ($this) {
             self::ESTIMATE => 'お見積り',
             self::RECRUIT => '採用',
             self::OTHER => 'その他',
         };
     }
-
 
 }
 
