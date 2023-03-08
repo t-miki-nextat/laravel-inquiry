@@ -3,24 +3,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Inquiries;
+use App\Models\Inquiry;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
-class InquiriesController extends Controller
+class InquiryController extends Controller
 {
     /**
-     * Display a inquiry form.
+     * Display an inquiry form.
      *
      * @return View
      */
     public function form(): View
     {
-        return view('inquiries.form');
+        return view('inquiry.form');
     }
 
     /**
@@ -30,7 +29,7 @@ class InquiriesController extends Controller
      */
     public function complete(): View
     {
-        return view('inquiries.complete');
+        return view('inquiry.complete');
     }
 
     /**
@@ -49,7 +48,7 @@ class InquiriesController extends Controller
      */
     public function store(Request $request): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        $inquiry=new Inquiries;
+        $inquiry=new Inquiry;
 
         $inquiry->name=$request->input('name');
         $inquiry->email=$request->input('email');
@@ -57,13 +56,13 @@ class InquiriesController extends Controller
         $inquiry->type=$request->input('type');
         $inquiry->save();
 
-        return redirect('inquiries/complete');
+        return redirect('complete');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Inquiries $inquiries)
+    public function show(Inquiry $inquiries)
     {
         //
     }
@@ -71,7 +70,7 @@ class InquiriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Inquiries $inquiries)
+    public function edit(Inquiry $inquiries)
     {
         //
     }
@@ -79,7 +78,7 @@ class InquiriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Inquiries $inquiries)
+    public function update(Request $request, Inquiry $inquiries)
     {
         //
     }
@@ -87,7 +86,7 @@ class InquiriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Inquiries $inquiries)
+    public function destroy(Inquiry $inquiries)
     {
         //
     }

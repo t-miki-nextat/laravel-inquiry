@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\InquiryType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Inquiries
+ * Class Inquiry
  * @property int $id ID
  * @property string $name name
  * @property string $email email
  * @property string $content inquiry_content
- * @property string $type inquiry_type
+ * @property InquiryType $type inquiry_type
  */
-class Inquiries extends Model
+class Inquiry extends Model
 {
     use HasFactory;
     /**
