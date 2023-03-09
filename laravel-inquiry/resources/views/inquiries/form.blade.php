@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form method="POST" action="{{route('store')}}">
+                <form method="POST" action="{{route('inquiries.store')}}">
                     @csrf
                     @if ($errors->any())
                         <div class="text-danger">

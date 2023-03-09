@@ -52,16 +52,10 @@ class InquiryController extends Controller
      */
     public function store(StoreInquiryRequest $request): RedirectResponse
     {
-        $request->validated();
+        $validated = $request->validated();
         $inquiry = new Inquiry;
-
-        $inquiry->name = $request->input('name');
-        $inquiry->email = $request->input('email');
-        $inquiry->content = $request->input('content');
-        $inquiry->type = $request->input('type');
-        $inquiry->save();
-
-        return redirect()->route("complete");
+        $inquiry->fill($validated)->save();
+        return redirect()->route("inquiries.complete");
     }
 
     /**
