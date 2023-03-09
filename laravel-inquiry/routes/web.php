@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
@@ -15,14 +16,13 @@ use App\Http\Controllers\InquiryController;
 |
 */
 
-Route::group(['prefix'=>'inquiries'], function(){
+Route::group(['prefix' => 'inquiries', 'as' => 'inquiries.'], function () {
+    Route::get('/', [InquiryController::class, 'form'])->name('form');
 
-Route::get('/', [InquiryController::class, 'form'])->name('form');
+    Route::get('complete', [InquiryController::class, 'complete'])->name('complete');
 
-Route::get('complete', [InquiryController::class, 'complete'])->name('complete');
-
+    Route::post('store', [InquiryController::class, 'store'])->name('store');
 });
 
-Route::post('store', [InquiryController::class, 'store'])->name('inquiries.store');
 
 

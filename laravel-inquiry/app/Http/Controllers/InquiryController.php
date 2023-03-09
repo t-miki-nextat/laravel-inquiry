@@ -56,8 +56,7 @@ class InquiryController extends Controller
         $inquiry = new Inquiry;
 
         $inquiry->fill($validated)->save();
-
-        return redirect()->route("complete");
+        return redirect()->route("inquiries.complete");
     }
 
     /**

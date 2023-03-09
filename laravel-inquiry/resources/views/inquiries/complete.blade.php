@@ -2,6 +2,6 @@
 
 @section('title', '送信完了')
 @section('content')
-お問合せありがとうございました<br>
-<a href={{route('inquiries.form')}} >問合せフォームへ戻る</a>
+    お問合せありがとうございました<br>
+    <a href={{route('inquiries.form')}} >お問合せフォームへ戻る</a>
 @endsection
