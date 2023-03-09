@@ -133,8 +133,4 @@ return [
     |
     */
 
-    'features' => [
-        Features::registration(),
-    ],
-
 ];
