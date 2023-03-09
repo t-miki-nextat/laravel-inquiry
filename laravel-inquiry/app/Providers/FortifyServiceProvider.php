@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
@@ -37,7 +39,7 @@ class FortifyServiceProvider extends ServiceProvider
 //        });
 
         // RateLimiter::for('two-factor', function (Request $request) {
-        //     return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        //     return Limit::perMinute(5)->by($request->session()->get('login.blade.php.id'));
         // });
 //        Fortify::registerView(function () {
 //            return view('auth.register');
