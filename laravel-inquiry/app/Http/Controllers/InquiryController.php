@@ -1,14 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\InquiryType;
 use App\Models\Inquiry;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
+use App\Http\Requests\StoreInquiryRequest;
 
 class InquiryController extends Controller
 {
@@ -19,7 +23,7 @@ class InquiryController extends Controller
      */
     public function form(): View
     {
-        return view('inquiry.form');
+        return view('inquiries.form');
     }
 
     /**
@@ -29,7 +33,7 @@ class InquiryController extends Controller
      */
     public function complete(): View
     {
-        return view('inquiry.complete');
+        return view('inquiries.complete');
     }
 
     /**
@@ -43,20 +47,15 @@ class InquiryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Application|\Illuminate\Foundation\Application|RedirectResponse|Redirector
+     * @param StoreInquiryRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
+    public function store(StoreInquiryRequest $request): RedirectResponse
     {
-        $inquiry=new Inquiry;
-
-        $inquiry->name=$request->input('name');
-        $inquiry->email=$request->input('email');
-        $inquiry->content=$request->input('content');
-        $inquiry->type=$request->input('type');
-        $inquiry->save();
-
-        return redirect('complete');
+        $validated = $request->validated();
+        $inquiry = new Inquiry;
+        $inquiry->fill($validated)->save();
+        return redirect()->route("inquiries.complete");
     }
 
     /**

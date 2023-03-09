@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
@@ -14,11 +15,11 @@ use App\Http\Controllers\InquiryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::group(['prefix'=>'inquiry', 'as'=>'inquiry.'], function(){
 
-    Route::get('/', function(){ return view('form'); })->name('form');
+Route::group(['prefix' => 'inquiries', 'as' => 'inquiries.'], function () {
+    Route::get('/', [InquiryController::class, 'form'])->name('form');
 
-    Route::get('complete', function(){ return view('complete'); })->name('complete');
+    Route::get('complete', [InquiryController::class, 'complete'])->name('complete');
 
     Route::post('store', [InquiryController::class, 'store'])->name('store');
 });
