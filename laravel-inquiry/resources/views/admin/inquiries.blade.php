@@ -13,16 +13,17 @@
                 </tr>
             </thread>
             <tbody>
-                @foreach ($inquiries as $inquiry)
-                    <tr>
-                        <td><a href="{{ route('admin.inquiries.show', ['id'=>$inquiry->id]) }}" class="btn btn-primary">{{ $inquiry->id }}</a></td>
-                        <td>{{ $inquiry->name }}</td>
-                        <td>{{ $inquiry->email }}</td>
-                        <td>{{ $inquiry->content }}</td>
-                        <td>{{ $inquiry->type }}</td>
-                        <td>{{ $inquiry->created_at }}</td>
-                    </tr>
-                @endforeach
+            @foreach ($inquiries as $inquiry)
+                <tr>
+                    <td><a href="{{ route('admin.inquiries.show', ['id'=>$inquiry->id]) }}"
+                           class="btn btn-primary">{{ $inquiry->id }}</a></td>
+                    <td>{{ $inquiry->name }}</td>
+                    <td>{{ $inquiry->email }}</td>
+                    <td>{{ $inquiry->content }}</td>
+                    <td>{{ $inquiry->type }}</td>
+                    <td>{{ $inquiry->created_at }}</td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>

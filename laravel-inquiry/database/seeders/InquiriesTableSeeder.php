@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Database\Seeders;
@@ -19,21 +20,7 @@ class InquiriesTableSeeder extends Seeder
      */
     public function run()
     {
-
-
         Inquiry::factory()->count(50)->create();
-
-        //1件のデータ
-        //  $titles = ["テスト","練習","実践"];
-
-        // foreach($titles as $title){
-        //     DB::table('tasks')->insert([
-        //         'title' => $title,
-        //         'folder_id' => 3,
-        //         'due_date'  => Carbon::now(),
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //            ]);
     }
 
 
