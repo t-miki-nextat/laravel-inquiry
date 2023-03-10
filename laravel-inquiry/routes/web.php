@@ -25,9 +25,9 @@ Route::group(['prefix' => 'inquiries', 'as' => 'inquiries.'], function () {
     Route::post('store', [InquiryController::class, 'store'])->name('store');
 });
 
-Route::group(['middleware' => ['auth'], 'prefix'=>'auth', 'as'=>'auth.'], function () {
-    Route::get('admin', [AdminController::class, 'index'])->name('admin');
-    Route::resource('admin', AdminController::class);
+Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], function () {
+    Route::get('/', [AdminController::class, 'showDashboard'])->name('top');
+//    Route::resource('admin', AdminController::class);
 });
 
 

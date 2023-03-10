@@ -105,7 +105,7 @@ return [
     */
 
     'limiters' => [
-        'login.blade.php' => 'login.blade.php',
+        'login.blade.php' => 'login',
         'two-factor' => 'two-factor',
     ],
 
