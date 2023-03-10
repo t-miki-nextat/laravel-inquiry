@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\InquiryType;
+use App\Models\Inquiry;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Inquiry>
+ * @extends Factory<Inquiry>
  */
 class InquiryFactory extends Factory
 {
@@ -22,7 +23,7 @@ class InquiryFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'content' => $this->faker->realText(rand(15,40)),
-            'type' => 'estimate',
+            'type' => InquiryType::from('estimate'),
         ];
     }
 

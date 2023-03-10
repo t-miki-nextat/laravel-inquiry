@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\InquiryType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Inquiry
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email email
  * @property string $content inquiry_content
  * @property InquiryType $type inquiry_type
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Inquiry extends Model
 {

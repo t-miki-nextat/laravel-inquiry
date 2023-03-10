@@ -1,6 +1,9 @@
 @extends('layout.default')
 
 @section('content')
+    @php
+    /** @var \App\Models\Inquiry $inquiry */
+    @endphp
     <h1>詳細確認</h1>
     <div class="container">
         <table class="table">
@@ -20,8 +23,8 @@
                     <td>{{ $inquiry->name }}</td>
                     <td>{{ $inquiry->email }}</td>
                     <td>{{ $inquiry->content }}</td>
-                    <td>{{ $inquiry->type }}</td>
-                    <td>{{ $inquiry->created_at }}</td>
+                    <td>{{ $inquiry->type->text() }}</td>
+                    <td>{{ $inquiry->created_at->format('Y/m/d H:i:s') }}</td>
                 </tr>
             </tbody>
         </table>
