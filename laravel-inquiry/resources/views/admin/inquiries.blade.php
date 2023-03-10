@@ -15,7 +15,7 @@
             <tbody>
                 @foreach ($inquiries as $inquiry)
                     <tr>
-                        <td><a{{ $inquiry->id }}</td>
+                        <td><a href="{{ route('admin.inquiries.show', ['id'=>$inquiry->id]) }}" class="btn btn-primary">{{ $inquiry->id }}</a></td>
                         <td>{{ $inquiry->name }}</td>
                         <td>{{ $inquiry->email }}</td>
                         <td>{{ $inquiry->content }}</td>

@@ -28,6 +28,16 @@ class AdminController extends Controller
     public function index(): View
     {
         $inquiries = Inquiry::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.inquiries', ['inquiries'=>$inquiries]);
+        return view('admin.inquiries', ['inquiries' => $inquiries]);
+    }
+
+    public function show($id)
+    {
+        $inquiry = Inquiry::find($id);
+        if (!$inquiry) {
+            abort(404);
+        } else {
+            return view('admin.show', ['inquiry' => $inquiry]);
+        }
     }
 }
