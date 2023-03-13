@@ -27,10 +27,9 @@ Route::group(['prefix' => 'inquiries', 'as' => 'inquiries.'], function () {
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [AdminController::class, 'showDashboard'])->name('top');
-    Route::get('inquiries', [AdminController::class, 'index'])->name('inquiries');
-    Route::get('show/{id}', [AdminController::class, 'show'])->name('inquiries.show');
+    Route::group(['prefix' => 'inquiries', 'as' => 'inquiries.'], function () {
+        Route::get('/', [AdminController::class, 'index'])->name('inquiries');
+        Route::get('{id}', [AdminController::class, 'show'])->name('show');
+    });
     Route::resource('admin', AdminController::class);
 });
-
-
-

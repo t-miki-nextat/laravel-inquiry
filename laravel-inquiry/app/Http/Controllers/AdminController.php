@@ -5,12 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Inquiry;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -22,22 +17,24 @@ class AdminController extends Controller
         return view('admin.top');
     }
 
+    private const PER_PAGE = 10;
     /**
      * @return View
      */
     public function index(): View
     {
-        $inquiries = Inquiry::orderBy('created_at', 'desc')->paginate(10);
+        $inquiries = Inquiry::query()->orderBy('created_at', 'desc')->paginate(self::PER_PAGE, ['*'], 'page', 'null');
         return view('admin.inquiries', ['inquiries' => $inquiries]);
     }
 
-    public function show($id)
+    /**
+     * @param int $id
+     * @return View
+     */
+    public function show(int $id): View
     {
-        $inquiry = Inquiry::find($id);
-        if (!$inquiry) {
-            abort(404);
-        } else {
-            return view('admin.show', ['inquiry' => $inquiry]);
-        }
+        $inquiry = Inquiry::query()->findOrFail($id);
+
+        return view('admin.show', ['inquiry' => $inquiry]);
     }
 }
