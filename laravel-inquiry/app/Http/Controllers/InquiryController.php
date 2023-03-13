@@ -61,10 +61,9 @@ class InquiryController extends Controller
 
         $inquiry->fill($validated)->save();
 
-        $users= User::all();
-        $content=$inquiry->content;
+        $users = User::all();
+        $content = $inquiry->content;
         Notification::send($users, new InquiryNotification($content));
-//        (new InquiryService())->send($users, $content);
 
         return redirect()->route("inquiries.complete");
     }
