@@ -1,6 +1,11 @@
 @extends('layout.default')
 @section('content')
     <div class="container">
+        @if (session('flash_message'))
+            <div class="flash_message">
+                {{ session('flash_message') }}
+            </div>
+        @endif
         <table class="table">
             <thread>
                 <tr>
@@ -21,4 +26,5 @@
             </tbody>
         </table>
     </div>
+    {{ $users->links() }}
 @endsection()

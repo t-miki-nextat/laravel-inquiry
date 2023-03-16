@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StorePost;
+use App\Http\Requests\User\UpdatePut;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use App\Http\Requests\StoreUserRequest;
 
 class AdminUserController extends Controller
 {
@@ -23,7 +20,7 @@ class AdminUserController extends Controller
      */
     public function index(): View
     {
-        $users = User::all();
+        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', '1');
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -40,7 +37,7 @@ class AdminUserController extends Controller
      * @param int $id
      * @return View
      */
-    public function show(int $id): View
+    public function edit(int $id): View
     {
         $user = User::query()->findOrFail($id);
         return view('admin.users.edit', ['user' => $user]);
@@ -48,31 +45,27 @@ class AdminUserController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param UpdatePut $request
      * @param User $user
      * @return RedirectResponse
      */
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(UpdatePut $request, User $user): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
-        ]);
-
         $user = User::query()->findOrFail($request->id);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->save();
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('flash_message', '更新しました');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param int $id
+     * @return RedirectResponse
      */
     public function destroy(int $id): RedirectResponse
     {
         User::query()->findOrFail($id)->delete();
-        return redirect()->route('login');
+        return redirect()->route('admin.users.index');
     }
 }

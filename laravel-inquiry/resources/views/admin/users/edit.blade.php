@@ -32,7 +32,7 @@
                 <input class="send" type="submit" value="編集">
             </div>
         </form>
-        <form method="post" action="{{route('admin.users.delete', $user->id)}}">
+        <form method="post" action="{{route('admin.users.destroy', $user->id)}}">
             @csrf
             @method('DELETE')
             <input class="send" type="submit" value="削除">

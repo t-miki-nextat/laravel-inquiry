@@ -35,8 +35,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::resource('admin', AdminController::class);
     Route::group(['prefix'=>'users', 'as'=>'users.'], function(){
         Route::get('/', [AdminUserController::class, 'index'])->name('index');
-        Route::get('{id}', [AdminUserController::class, 'show'])->name('edit');
+        Route::get('{id}', [AdminUserController::class, 'edit'])->name('edit');
         Route::put('{id}', [AdminUserController::class, 'update'])->name('update');
-        Route::delete('{id}', [AdminUserController::class, 'destroy'])->name('delete');
+        Route::delete('{id}', [AdminUserController::class, 'destroy'])->name('destroy');
     });
 });
