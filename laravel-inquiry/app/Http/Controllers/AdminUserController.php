@@ -25,11 +25,24 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('register');
+    }
+
+    /**
+     * @param StorePost $request
+     * @return RedirectResponse
+     */
+    public function store(StorePost $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $user = new User();
+
+        $user->fill($validated)->save();
+        return redirect()->route('admin.users.index')->with('flash_message', 'ユーザー登録しました');
     }
 
 
@@ -51,10 +64,12 @@ class AdminUserController extends Controller
      */
     public function update(UpdatePut $request, User $user): RedirectResponse
     {
+        $validated = $request->validated();
         $user = User::query()->findOrFail($request->id);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->save();
+        $user->fill($validated)->save();
+
 
         return redirect()->route('admin.users.index')->with('flash_message', '更新しました');
     }

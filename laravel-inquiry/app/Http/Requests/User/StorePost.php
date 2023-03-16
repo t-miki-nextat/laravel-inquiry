@@ -19,7 +19,6 @@ class StorePost extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
      * @return array<string, Rule|array|string>
      */
     public function rules(): array
@@ -27,6 +26,7 @@ class StorePost extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'unique:users,id', 'string', 'max:255'],
+            'password'=>['required', 'string'],
         ];
     }
 
@@ -40,5 +40,4 @@ class StorePost extends FormRequest
             'email' => 'メールアドレス',
         ];
     }
-
 }
