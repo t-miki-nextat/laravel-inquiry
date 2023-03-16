@@ -38,10 +38,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
         Route::get('{id}', [AdminUserController::class, 'edit'])->name('edit');
         Route::put('{id}', [AdminUserController::class, 'update'])->name('update');
         Route::delete('{id}', [AdminUserController::class, 'destroy'])->name('destroy');
+        Route::group(['prefix' => 'create'], function () {
+            Route::get('/', [AdminUserController::class, 'create'])->name('create');
+            Route::post('/', [AdminUserController::class, 'store'])->name('store');
+        });
     });
-});
-
-Route::group(['prefix' => 'register'], function () {
-    Route::get('/', [AdminUserController::class, 'create'])->name('create');
-    Route::post('/', [AdminUserController::class, 'store'])->name('store');
 });

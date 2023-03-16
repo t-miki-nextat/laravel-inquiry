@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\IndexGet;
 use App\Http\Requests\User\StorePost;
 use App\Http\Requests\User\UpdatePut;
 use App\Models\User;
@@ -16,11 +17,12 @@ class AdminUserController extends Controller
 
     /**
      * Display a listing of the resource.
+     * @param IndexGet $request
      * @return View
      */
-    public function index(): View
+    public function index(IndexGet $request): View
     {
-        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', '1');
+        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', 'null');
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -29,7 +31,7 @@ class AdminUserController extends Controller
      */
     public function create(): View
     {
-        return view('register');
+        return view('admin.users.create');
     }
 
     /**
