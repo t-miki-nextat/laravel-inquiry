@@ -18,7 +18,6 @@ class AdminController extends Controller
     }
 
     private const PER_PAGE = 10;
-
     /**
      * @return View
      */

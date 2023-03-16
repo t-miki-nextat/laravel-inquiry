@@ -18,14 +18,14 @@
                 </tr>
             </thread>
             <tbody>
-                <tr>
-                    <td>{{ $inquiry->id }}</a></td>
-                    <td>{{ $inquiry->name }}</td>
-                    <td>{{ $inquiry->email }}</td>
-                    <td>{{ $inquiry->content }}</td>
-                    <td>{{ $inquiry->type->text() }}</td>
-                    <td>{{ $inquiry->created_at->format('Y/m/d H:i:s') }}</td>
-                </tr>
+            <tr>
+                <td>{{ $inquiry->id }}</a></td>
+                <td>{{ $inquiry->name }}</td>
+                <td>{{ $inquiry->email }}</td>
+                <td>{{ $inquiry->content }}</td>
+                <td>{{ $inquiry->type->text() }}</td>
+                <td>{{ $inquiry->created_at->format('Y/m/d H:i:s') }}</td>
+            </tr>
             </tbody>
         </table>
     </div>

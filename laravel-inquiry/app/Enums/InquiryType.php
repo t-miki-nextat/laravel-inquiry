@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace App\Enums;
 
 
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-
 enum InquiryType: string
 {
     case ESTIMATE = 'estimate';
