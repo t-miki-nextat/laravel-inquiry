@@ -14,11 +14,7 @@ class IndexGet extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->path() == 'index') {
             return true;
-        } else {
-            return false;
-        }
     }
 
     /**
