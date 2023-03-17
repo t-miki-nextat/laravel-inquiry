@@ -23,7 +23,7 @@
                     <input type="email" name="email" value="{{old('email')}}"><br>
                     種別<br>
                     <select name="type" class="form-select form-select-lg mb-3">
-                        @foreach(InquiryType::cases() as $type)
+                        @foreach(App\Enums\InquiryType::cases() as $type)
                             <option label="{{ $type->text() }}" value="{{ $type->value }}"></option>
                         @endforeach
                     </select><br>
