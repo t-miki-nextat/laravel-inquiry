@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Providers\RouteServiceProvider;
+use Laravel\Fortify\Features;
 
 return [
 
@@ -47,7 +48,6 @@ return [
     |
     */
 
-    'username' => 'email',
 
     'email' => 'email',
 
@@ -131,5 +131,9 @@ return [
     | these features or you can even remove all of these if you need to.
     |
     */
+    'features' => [
+        Features::registration(),
+        Features::updateProfileInformation(),
+    ],
 
 ];

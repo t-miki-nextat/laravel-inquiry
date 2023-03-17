@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
         Route::get('{id}', [AdminController::class, 'show'])->name('show');
     });
     Route::resource('admin', AdminController::class);
+    Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+        Route::get('/', [AdminUserController::class, 'index'])->name('index');
+        Route::get('{id}', [AdminUserController::class, 'edit'])->name('edit');
+        Route::put('{id}', [AdminUserController::class, 'update'])->name('update');
+        Route::delete('{id}', [AdminUserController::class, 'destroy'])->name('destroy');
+        Route::get('create', [AdminUserController::class, 'create'])->name('create');
+        Route::post('/', [AdminUserController::class, 'store'])->name('store');
+    });
 });
