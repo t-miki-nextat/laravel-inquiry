@@ -49,6 +49,7 @@ return [
     */
 
 
+    'username' => 'email',
     'email' => 'email',
 
     /*
@@ -132,8 +133,6 @@ return [
     |
     */
     'features' => [
-        Features::registration(),
-        Features::updateProfileInformation(),
     ],
 
 ];

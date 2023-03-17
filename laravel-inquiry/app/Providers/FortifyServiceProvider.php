@@ -26,13 +26,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::loginView(function () {
             return view('login');
-        });
-        Fortify::registerView(function () {
-            return view('register');
         });
 
         RateLimiter::for("login", function () {
