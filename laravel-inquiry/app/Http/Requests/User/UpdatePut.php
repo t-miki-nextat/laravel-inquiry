@@ -26,7 +26,7 @@ class UpdatePut extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'unique:users,id', 'string', 'max:255'],
+            'email' => ['required', 'unique:users', 'string', 'max:255'],
         ];
     }
 

@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
-class Controller extends Controller
+class FormController extends Controller
 {
     /**
      * Display an inquiry form.
