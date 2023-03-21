@@ -2,23 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Inquiry;
 
-use App\Enums\InquiryType;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreInquiryRequest;
 use App\Models\Inquiry;
 use App\Models\User;
 use App\Notifications\InquiryNotification;
-use App\Services\InquiryService;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
-use Illuminate\Validation\Rules\Enum;
-use Illuminate\View\View;
-use App\Http\Requests\StoreInquiryRequest;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\View\View;
 
-class InquiryController extends Controller
+class Controller extends Controller
 {
     /**
      * Display an inquiry form.

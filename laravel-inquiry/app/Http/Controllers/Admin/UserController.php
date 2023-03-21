@@ -22,7 +22,7 @@ class AdminUserController extends Controller
      */
     public function index(IndexGet $request): View
     {
-        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', 'null');
+        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', );
         return view('admin.users.index', ['users' => $users]);
     }
 
