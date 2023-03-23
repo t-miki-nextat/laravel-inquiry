@@ -91,7 +91,7 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @testdox email should not be filled with string which already exists in database
+     * @testdox email may not be filled with string which already exists in database
      * @return void
      */
     public function testEmailUniqueness(): void

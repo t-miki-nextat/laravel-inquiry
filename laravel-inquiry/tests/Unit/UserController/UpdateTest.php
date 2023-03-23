@@ -18,6 +18,10 @@ class UpdateTest extends TestCase
     public const LOGIN_PATH = '/login';
     public const EDIT_PATH = 'admin/users/';
 
+    /**
+     * @testdox name and email cannot be filled with null
+     * @return void
+     */
     public function testNotNullableRules(): void
     {
         $data = [
@@ -38,6 +42,10 @@ class UpdateTest extends TestCase
         $this->assertEquals($expectedFailed, $validator->failed());
     }
 
+    /**
+     * @testdox name and email cannot be filled with string above 256 digits
+     * @return void
+     */
     public function testMaxDigitRules(): void
     {
         $data = [
@@ -58,6 +66,10 @@ class UpdateTest extends TestCase
         $this->assertEquals($expectedFailed, $validator->failed());
     }
 
+    /**
+     * @testdox valid name, email can pass validation
+     * @return void
+     */
     public function testValidUpdate(): void
     {
         $data = [
@@ -73,7 +85,11 @@ class UpdateTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testEmailUniqueness()
+    /**
+     * @testdox email may not be filled with string which already exists in database
+     * @return void
+     */
+    public function testEmailUniqueness(): void
     {
         $user = User::factory()->create();
         /** @var User $user $data */

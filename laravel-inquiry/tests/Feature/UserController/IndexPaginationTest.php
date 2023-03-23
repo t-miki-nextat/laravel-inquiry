@@ -88,7 +88,7 @@ class IndexPaginationTest extends TestCase
      * @param int $id
      * @param string $name
      */
-    public function testIndexPagination_ng(int $id, string $name): void
+    public function testIndexPaginationNg(int $id, string $name): void
     {
         $userAdmin = User::factory()->create();
         $this->actingAs($userAdmin);
@@ -115,6 +115,9 @@ class IndexPaginationTest extends TestCase
     }
 
 
+    /**
+     *@return iterable
+     */
     public function paginationTestData(): iterable
     {
         yield 'id1' => [
