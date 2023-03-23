@@ -24,11 +24,11 @@ class UserController extends Controller
     public function index(IndexGet $request): View
     {
         if ($request['page'] = null) {
-            $page=1;
+            $page = 1;
         } else {
             $page = (int)$request['page'];
         }
-        $users = User::query()->orderBy('created_at')->paginate(self::PER_PAGE, ['*'], 'page', $page);
+        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', $page);
         return view('admin.users.index', ['users' => $users]);
     }
 

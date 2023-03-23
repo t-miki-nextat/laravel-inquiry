@@ -19,6 +19,10 @@ class StoreTest extends TestCase
     public const SIGNUP_PATH = 'admin/users/create';
     public const LOGIN_PATH = '/login';
 
+    /**
+     * @testdox name, email and password cannot be filled with null
+     * @return void
+     */
     public function testNotNullableRules(): void
     {
         $data = [
@@ -41,6 +45,10 @@ class StoreTest extends TestCase
         $this->assertEquals($expectedFailed, $validator->failed());
     }
 
+    /**
+     * @testdox name and email cannot be filled with string above 256 digits
+     * @return void
+     */
     public function testMaxDigitRules(): void
     {
         $data = [
@@ -62,6 +70,10 @@ class StoreTest extends TestCase
         $this->assertEquals($expectedFailed, $validator->failed());
     }
 
+    /**
+     * @testdox valid name, email and password can pass validation
+     * @return void
+     */
     public function testValidStore(): void
     {
         $data = [
@@ -78,10 +90,14 @@ class StoreTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testEmailUniqueness()
+    /**
+     * @testdox email should not be filled with string which already exists in database
+     * @return void
+     */
+    public function testEmailUniqueness(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
-        /** @var User $user $data */
         $data = [
             'name' => 'test',
             'email' => $user->email,
