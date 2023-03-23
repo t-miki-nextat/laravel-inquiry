@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Inquiry;
 
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreInquiryRequest;
 use App\Models\Inquiry;
 use App\Models\User;
-use App\Notifications\InquiryNotification;
+use App\Services\InquiryMailService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
+use App\Http\Requests\StoreInquiryRequest;
 
 class FormController extends Controller
 {
+
+    public function __construct(private readonly InquiryMailService $service)
+    {
+    }
+
     /**
      * Display an inquiry form.
      *
@@ -57,9 +62,11 @@ class FormController extends Controller
 
         $inquiry->fill($validated)->save();
 
-        $users = User::all();
-        $content = $inquiry->content;
-        Notification::send($users, new InquiryNotification($content));
+        /** @var User $user */
+        foreach (User::query()->cursor() as $user) {
+            $content = $inquiry->content;
+            $this->service->send($user, $content);
+        }
 
         return redirect()->route("inquiries.complete");
     }
@@ -96,3 +103,5 @@ class FormController extends Controller
         //
     }
 }
+
+
