@@ -18,16 +18,17 @@ class DestroyTest extends TestCase
     public const EDIT_PATH = 'admin/users/';
     public const SIGNUP_PATH = 'admin/users/create';
 
+    /** @testdox unauthenticated user may not be allowed to log-in. */
     public function testUpdateNotAuthenticated(): void
     {
-        $this->withoutExceptionHandling();
-        $this->expectException(AuthenticationException::class);
-        $user = User::factory()->create();
         /** @var User $user */
+        $user = User::factory()->create();
+
         $response = $this->get(self::EDIT_PATH . $user->id);
         $response->assertRedirect(self::LOGIN_PATH);
     }
 
+    /** @testdox authenticated user can delete some user information. */
     public function testDestroyAuthenticated(): void
     {
         $data = [
@@ -36,19 +37,19 @@ class DestroyTest extends TestCase
             'password' => '0123456',
         ];
 
-        $user=User::factory()->create();
-        $response=$this->actingAs($user);
+        $user = User::factory()->create();
+        $response = $this->actingAs($user);
         $response->post(self::SIGNUP_PATH, $data);
         /** @var User $destroyable */
-        $destroyable=User::query()->where('name', 'test')->first();
+        $destroyable = User::query()->where('name', 'test')->first();
 
-        $response=$this->delete(self::EDIT_PATH.$destroyable->id, ['id'=>$destroyable->id]);
+        $response = $this->delete(self::EDIT_PATH . $destroyable->id, ['id' => $destroyable->id]);
         $response->assertRedirect(self::INDEX_PATH);
 
         $this->assertDatabaseMissing('users', [
             'id' => $destroyable->id,
-            'name' => $destroyable->name,
-            'email' => $destroyable->email,
+            'name' => 'test',
+            'email' => 'email@example.com',
         ]);
     }
 

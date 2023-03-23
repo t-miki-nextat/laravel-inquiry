@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UserController;
 
-use App\Http\Requests\User\UpdatePut;
 use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
@@ -19,21 +17,18 @@ class UpdateTest extends TestCase
     public const LOGIN_PATH = '/login';
     public const EDIT_PATH = 'admin/users/';
 
-
+    /** @testdox unauthenticated user may not be allowed to log-in. */
     public function testUpdateNotAuthenticated(): void
     {
-        $this->withoutExceptionHandling();
-        $this->expectException(AuthenticationException::class);
         $user = User::factory()->create();
         /** @var User $user */
         $response = $this->get(self::EDIT_PATH . $user->id);
         $response->assertRedirect(self::LOGIN_PATH);
     }
 
+    /** @testdox authenticated user can update database. */
     public function testUpdateAuthenticated(): void
     {
-        $this->withoutExceptionHandling();
-
         /** @var User $user */
         $user = User::factory()->create();
         $data = [
@@ -51,81 +46,114 @@ class UpdateTest extends TestCase
         ]);
     }
 
-    public function testNotNullableRules(): void
-    {
-        $data = [
-            'name' => null,
-            'email' => null,
-        ];
-        $request = new UpdatePut();
-        $rules = $request->rules();
 
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed = [
-            'name' => ['Required' => [],],
-            'email' => ['Required' => [],],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
-    }
-
-    public function testMaxDigitRules(): void
-    {
-        $data = [
-            'name' => str_repeat('a', 256),
-            'email' => str_repeat('a', 256),
-        ];
-        $request = new UpdatePut();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed = [
-            'name' => ['Max' => [255],],
-            'email' => ['Max' => [255],],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
-    }
-
-    public function testValidUpdate(): void
-    {
-        $data = [
-            'name' => 'test',
-            'email' => 'email@example.com',
-        ];
-        $request = new UpdatePut();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertTrue($result);
-    }
-
-    public function testEmailUniqueness()
+    /**
+     * @testdox invalid put request may not be allowed with being followed by right error messages
+     * @dataProvider dataProvideInvalidPutUser
+     * @param array $putUser
+     * @param array $errorMessage
+     * @return void
+     */
+    public function testUpdateInvalidRequest(array $putUser, array $errorMessage): void
     {
         $user = User::factory()->create();
-        /** @var User $user $data */
+        $response = $this->actingAs($user)->putRequest($putUser);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors($errorMessage);
+    }
+
+    /** @testdox check right redirection is returning when valid post request is sent */
+    public function testUpdateValidRequest(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->putJson(self::EDIT_PATH . $user->id, $this->basePutUser());
+        $response->assertRedirect(self::INDEX_PATH);
+    }
+
+    /** @testdox user email should be unique */
+    public function testEmailUniqueness(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
         $data = [
-            'name' => 'test',
+            'name' => $user->name,
             'email' => $user->email,
         ];
-        $request = new UpdatePut();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed = [
-            'email' => ['Unique' => ['users']],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
+        $response = $this->actingAs($user)
+            ->putJson(self::EDIT_PATH . $user->id, $data);
+        $response->assertStatus(422);
     }
 
 
+    /**
+     * @param array|null $putUser
+     * @return TestResponse
+     */
+    public function putRequest(array $putUser = null): TestResponse
+    {
+        return $this->json(
+            'put',
+            self::EDIT_PATH . 4,
+            $putUser ?? $this->basePutUser()
+        );
+    }
+
+    /** @return iterable */
+    public function dataProvideInvalidPutUser(): iterable
+    {
+        yield 'value is null' => [
+            'putUser' => array_merge(
+                $this->basePutUser(),
+                [
+                    'id' => 4,
+                    'name' => null,
+                    'email' => null,
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は必ず指定してください。',
+                'email' => 'メールアドレスは必ず指定してください。',
+            ]
+        ];
+
+        yield 'number of characters is above 255' => [
+            'putUser' => array_merge(
+                $this->basePutUser(),
+                [
+                    'id' => 4,
+                    'name' => str_repeat('a', 256),
+                    'email' => str_repeat('a', 256),
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は、255文字以下で指定してください。',
+                'email' => 'メールアドレスは、255文字以下で指定してください。'
+            ]
+        ];
+
+        yield 'value is not string' => [
+            'putUser' => array_merge(
+                $this->basePutUser(),
+                [
+                    'id' => 4,
+                    'name' => true,
+                    'email' => true,
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は文字列を指定してください。',
+                'email' => 'メールアドレスは文字列を指定してください。',
+            ]
+        ];
+    }
+
+    /** @return array */
+    private function basePutUser(): array
+    {
+        return [
+            'name' => 'test',
+            'email' => 'example@com',
+        ];
+    }
 }

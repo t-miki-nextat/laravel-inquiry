@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -20,19 +21,17 @@ class StoreTest extends TestCase
     public const SIGNUP_PATH = 'admin/users/create';
     public const LOGIN_PATH = '/login';
 
+    /** @testdox unauthenticated user may not be allowed to log-in. */
     public function testStoreNotAuthenticated(): void
     {
-        $this->withoutExceptionHandling();
-        $this->expectException(AuthenticationException::class);
         $response = $this->get(self::SIGNUP_PATH);
         $response->assertRedirect(self::LOGIN_PATH);
     }
 
+    /** @testdox authenticated user can post new user to database. */
     public function testStoreAuthenticated(): void
     {
-        $this->withoutExceptionHandling();
-
-        $user=User::factory()->create();
+        $user = User::factory()->create();
         $data = [
             'name' => 'test',
             'email' => 'email@example.com',
@@ -45,85 +44,99 @@ class StoreTest extends TestCase
         $this->assertDatabaseHas('users', $data);
     }
 
-    public function testNotNullableRules(): void
+    /**
+     * @testdox invalid post request may not be allowed with being followed by right error messages
+     * @dataProvider dataProvideInvalidStoreUser
+     * @param array $storeUser
+     * @param array $errorMessage
+     * @return void
+     */
+    public function testStoreInvalidRequest(array $storeUser, array $errorMessage): void
     {
-        $data = [
-            'name' => null,
-            'email' => null,
-            'password' => null,
-        ];
-        $request = new StorePost();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed = [
-            'name' => ['Required' => [],],
-            'email' => ['Required' => [],],
-            'password' => ['Required' => [],],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
-    }
-    public function testMaxDigitRules(): void
-    {
-        $data = [
-            'name' => str_repeat('a', 256),
-            'email' => str_repeat('a', 256),
-            'password' => 'test',
-        ];
-        $request = new StorePost();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed = [
-            'name' => ['Max' => [255],],
-            'email' => ['Max' => [255],],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->storeRequest($storeUser);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors($errorMessage);
     }
 
-    public function testValidStore(): void
+    /** @testdox check right redirection is returning when valid post request is sent */
+    public function testStoreValidRequest(): void
     {
-        $data = [
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->storeRequest();
+        $response->assertRedirect(self::INDEX_PATH);
+    }
+
+    /**
+     * @param array|null $storeUser
+     * @return TestResponse
+     */
+    public function storeRequest(array $storeUser = null): TestResponse
+    {
+        return $this->json(
+            'post',
+            "/admin/users/create",
+            $storeUser ?? $this->baseStoreUser()
+        );
+    }
+
+    /** @return iterable */
+    public function dataProvideInvalidStoreUser(): iterable
+    {
+        yield 'value is null' => [
+            'storeUser' => array_merge(
+                $this->baseStoreUser(),
+                [
+                    'name' => null,
+                    'email' => null,
+                    'password' => null,
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は必ず指定してください。',
+                'email' => 'メールアドレスは必ず指定してください。',
+                'password' => 'パスワードは必ず指定してください。',
+            ]
+        ];
+
+        yield 'number of characters is above 255' => [
+            'storeUser' => array_merge(
+                $this->baseStoreUser(),
+                [
+                    'name' => str_repeat('a', 256),
+                    'email' => str_repeat('a', 256),
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は、255文字以下で指定してください。',
+                'email' => 'メールアドレスは、255文字以下で指定してください。'
+            ]
+        ];
+
+        yield 'value is not string' => [
+            'storeUser' => array_merge(
+                $this->baseStoreUser(),
+                [
+                    'name' => true,
+                    'email' => true,
+                    'password' => true,
+                ]
+            ),
+            'errorMessage' => [
+                'name' => '名前は文字列を指定してください。',
+                'email' => 'メールアドレスは文字列を指定してください。',
+                'password' => 'パスワードは文字列を指定してください。',
+            ]
+        ];
+    }
+
+    /** @return array */
+    private function baseStoreUser(): array
+    {
+        return [
             'name' => 'test',
-            'email' => 'email@example.com',
-            'password' => '0123456',
+            'email' => 'example@com',
+            'password' => 'test'
         ];
-        $request = new StorePost();
-        $rules = $request->rules();
-
-        $validator = Validator::make($data, $rules);
-
-        $result = $validator->passes();
-        $this->assertTrue($result);
     }
-
-    public function testEmailUniqueness()
-    {
-        $user=User::factory()->create();
-        /** @var User $user $data */
-        $data=[
-            'name'=>'test',
-            'email'=>$user->email,
-            'password'=>'0123456',
-        ];
-        $request=new StorePost();
-        $rules=$request->rules();
-
-        $validator=Validator::make($data, $rules);
-
-        $result=$validator->passes();
-        $this->assertFalse($result);
-        $expectedFailed=[
-            'email'=>['Unique'=>['users']],
-        ];
-        $this->assertEquals($expectedFailed, $validator->failed());
-    }
-
-
 }
