@@ -54,14 +54,32 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['debug', 'info', 'error'],
             'ignore_exceptions' => false,
         ],
 
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+        'debug' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/debug/debug.log'),
+            'level' => 'debug',
+            'days' => 7,
+            'permission' => 0664,
+        ],
+
+        'info' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/info/info.log'),
+            'level' => 'info',
+            'days' => 7,
+            'permission' => 0664,
+        ],
+
+        'error' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/error/error.log'),
+            'level' => 'notice',
+            'days' => 7,
+            'permission' => 0664,
         ],
 
         'daily' => [

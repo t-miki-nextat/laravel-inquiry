@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexGet;
 use App\Http\Requests\User\StorePost;
 use App\Http\Requests\User\UpdatePut;
@@ -11,7 +12,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class AdminUserController extends Controller
+class UserController extends Controller
 {
     private const PER_PAGE = 10;
 
@@ -22,7 +23,12 @@ class AdminUserController extends Controller
      */
     public function index(IndexGet $request): View
     {
-        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', 'null');
+        if ($request['page'] = null) {
+            $page = 1;
+        } else {
+            $page = (int)$request['page'];
+        }
+        $users = User::query()->orderBy('id')->paginate(self::PER_PAGE, ['*'], 'page', $page);
         return view('admin.users.index', ['users' => $users]);
     }
 

@@ -7,7 +7,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Notifications\InquiryNotification;
 
-class InquiryService
+class InquiryMailService
 {
     /**
      * メールを送る
@@ -17,8 +17,6 @@ class InquiryService
      */
     public function send(User $user, string $content): void
     {
-        $user->notify(new InquiryNotification(
-            $content
-        ));
+        $user->notify(new InquiryNotification($content));
     }
 }

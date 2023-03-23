@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form method="POST" action="{{ route("create") }}">
+    <form method="POST" action="{{ route("admin.users.create") }}">
         @csrf
         <div>
             <label for="name">ユーザ名</label>

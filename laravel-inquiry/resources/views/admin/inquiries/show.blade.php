@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-        /** @var \App\Models\Inquiry $inquiry */
+    /** @var \App\Models\Inquiry $inquiry */
     @endphp
     <h1>詳細確認</h1>
     <div class="container">
